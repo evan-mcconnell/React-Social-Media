@@ -1,19 +1,56 @@
 import React from 'react';
+import PostDisplay from './PostDisplay/PostDisplay';
+import PostForm from './PostForm';
 
-import { Switch, Route } from 'react-router-dom';
 
-import Error404 from './Error404';
+class App extends React.Component{
 
-function App(){
-  return (
-    <div>
+  constructor(props){
+    super(props);
 
-      <Switch>
-        <Route component={Error404}/>
-      </Switch>
+    this.state = {
+      postData: [
+        {
+          user: {
+            username: 'Drogon',
+            image: 'Drogon.jpeg'
+          },
+          text: 'This is a dummy post!',
+          comments: []
+        }
+      ]
+    };
+    this.handleAddingPost = this.handleAddingPost.bind(this);
+  }
 
-    </div>
-  );
+  handleAddingPost(newPost) {
+    let NewPostData = this.state.postData.slice();
+    NewPostData.push(newPost);
+    this.setState({postData : NewPostData});
+  }
+
+  handleAddingComment(newComment) {
+    let PostToUpdate = this.state.postData.filter((post) => {
+      if(post.id === newComment.postId) {
+        return post;
+      }
+
+      PostToUpdate[0].comments.push(newComment);
+
+      this.setState()
+    });
+
+
+  }
+
+  render() {
+    return (
+      <div>
+        <PostDisplay posts={this.state.postData}/>
+        <PostForm onAddingPost={this.handleAddingPost}/>
+      </div>
+    );
+  }
 }
 
 export default App;
